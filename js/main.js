@@ -1,22 +1,25 @@
 //var cv = document.getElementById('canvas');
 //var ctx = cv.getContext('2d');
 //var ctx = $('#canvas').get(0).getContext('2d');
-var frameRate = 1000/30;
+var frameRate = 1000 / 30;
 var rightDown;
 var leftDown;
 var spaceDown;
 var Tank = {
-	topX:0,
-	topY:540
+	topX: 0,
+	topY: 540
 }
 var planes = [{
-	x:0,
-	layer:1,
-	orientL:true
+	topX: 0,
+	layer: 1,
+	orientL: 1
 }];
+var coolDownL1 = 66.66;
 var bullets = [];
 var coolDown = 0;
-window.onload = function(){
+var coolDownL0 = 100;
+var coolDownL2 = 166.66;
+window.onload = function() {
 	var body = document.getElementById("body");
 	canvas = document.createElement("canvas");
 
@@ -27,77 +30,134 @@ window.onload = function(){
 
 	body.appendChild(canvas);
 	var loader;
-	var imgLoad = function(url, callback){
+	var imgLoad = function(url, callback) {
 		loader = new Image();
 		loader.onload = callback;
 		loader.src = url;
 		return loader;
 	}
-	var drawImage = function(img,posX,posY){
+	var drawImage = function(img, posX, posY) {
 		ctx.drawImage(img, posX, posY);
 	}
-	var fireBullet = function(){
+	var fireBullet = function() {
 		var bulX = Tank.topX + 32;
 		var bulY = Tank.topY;
 		bullets.push({
-			topX:bulX,
-			topY:bulY
+			topX: bulX,
+			topY: bulY
 		});
 	}
-	var grass = imgLoad('./img/g.png', function(){
+	var grass = imgLoad('./img/g.png', function() {
 		drawImage(grass, 0, 0);
 	});
-	var layers = [0, 65, 130];
-	$('#body').keydown(function(event){
-		if (event.keyCode == 39 ){
+	var layas = [0, 65, 130];
+	$('#body').keydown(function(event) {
+		if (event.keyCode == 39) {
 			rightDown = true;
-		} else if (event.keyCode == 37){
+		} else if (event.keyCode == 37) {
 			leftDown = true;
-		} else if (event.keyCode == 32){
+		} else if (event.keyCode == 32) {
 			spaceDown = true;
 		} else {
 			return;
 		}
 	});
-	$('#body').keyup(function(event){
-		if(event.keyCode == 39){
+	$('#body').keyup(function(event) {
+		if (event.keyCode == 39) {
 			rightDown = false;
-		} else if (event.keyCode == 37){
+		} else if (event.keyCode == 37) {
 			leftDown = false;
-		} else if (event.keyCode == 32){
+		} else if (event.keyCode == 32) {
 			spaceDown = false;
 		} else {
 			return;
 		}
 	});
 	var bull;
-	var tank = imgLoad('./img/tank.png', function(){
-			drawImage(tank, Tank.topX, Tank.topY)
-		});
+	var tank = imgLoad('./img/tank.png', function() {
+		drawImage(tank, Tank.topX, Tank.topY)
+	});
 
-			bull = imgLoad('./img/bullet.png', function(){
-			});
-	var animate = function(){
+	bull = imgLoad('./img/bullet.png', function() {});
+	planeImgs = {
+		'L': imgLoad('./img/plane1.png'),
+		'R': imgLoad('./img/plane-1.png')
+	}
+	var animate = function() {
 		ctx.clearRect(0, 0, 500, 610);
-		if(rightDown && Tank.topX + 5 <= 450){
+		if (rightDown && Tank.topX + 5 <= 450) {
 			Tank.topX = Tank.topX + 5;
-		} else if (leftDown && Tank.topX - 5 >= 0){
+		} else if (leftDown && Tank.topX - 5 >= 0) {
 			Tank.topX = Tank.topX - 5;
 		}
-		if(spaceDown && coolDown == 0){
+		if (spaceDown && coolDown == 0) {
 			fireBullet();
 			coolDown = 5;
-		} else if (coolDown > 0){
-			coolDown = coolDown-1
+		} else if (coolDown > 0) {
+			coolDown = coolDown - 1
 		}
-		bullets.forEach(function(val, index, arr){
+		bullets.forEach(function(val, index, arr) {
 			bullets[index].topY = bullets[index].topY - 5;
 			drawImage(bull, bullets[index].topX, bullets[index].topY);
 		})
 		drawImage(tank, Tank.topX, Tank.topY)
-		planes.forEach(function(val, index, arr){
+		if (coolDownL1 < 1) {
+			var wilb;
+			if (Math.round(Math.random() * 1) == 1) {
+				wilb = 1;
+			} else {
+				wilb = -1;
+			}
+			planes.push({
+				topX: 0,
+				orientL: 1,
+				layer: 1
+			})
+			coolDownL1 = 66.66;
+		}
+		if (coolDownL0 < 1) {
+			var wilb;
+			if (Math.round(Math.random() * 1) == 1) {
+				wilb = 1;
+			} else {
+				wilb = -1;
+			}
+			planes.push({
+				topX: 0,
+				orientL: 1,
+				layer: 0
+			})
+			coolDownL0 = 100;
+		}
+		if (coolDownL2 < 1) {
+			var wilb;
+			if (Math.round(Math.random() * 1) == 1) {
+				wilb = 1;
+			} else {
+				wilb = -1;
+			}
+			planes.push({
+				topX: 0,
+				orientL: 1,
+				layer: 2
+			})
+			coolDownL2 = 166.66;
+		}
+		planes.forEach(function(val, index, arr) {
+			planes[index].topX = planes[index].topX + (5 * planes[index].orientL);
+			var imig;
+			if (planes[index].orientL == 1) {
+				imig = planeImgs['L'];
+			} else {
+				imig = planeImgs['R']
+			}
+			drawImage(imig, planes[index].topX, layas[planes[index].layer])
 
 		});
+		coolDownL1 = coolDownL1 - 1;
+		coolDownL0 = coolDownL0 - 1;
+		coolDownL2 = coolDownL2 - 1;
+
 	}
 	setInterval(animate, frameRate);
 }
