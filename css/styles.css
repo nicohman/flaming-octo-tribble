@@ -1,4 +1,12 @@
 #cav {
 	height:720;
 	width:1200;
+	border-style: solid;
+}
+canvas {
+    padding-left: 0;
+    padding-right: 0;
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
 }
