@@ -1,5 +1,5 @@
-ufo = imgLoad('./img/ufo.png')
-bull = imgLoad('./img/bullet.png', function() {});
-frame1 = imgLoad('./img/frame1.png', function() {});
-frame2 = imgLoad('./img/frame2.png', function() {});
-frame3 = imgLoad('./img/frame3.png', function() {});
+var bull = imgLoad('./img/bullet.png', function() {});
+var frame1 = imgLoad('./img/frame1.png', function() {});
+var frame2 = imgLoad('./img/frame2.png', function() {});
+var frame3 = imgLoad('./img/frame3.png', function() {});
+var ufo = imgLoad('./img/ufo.png')
