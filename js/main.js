@@ -69,6 +69,7 @@ window.onload = function() {
 		}
 		//A function to more easily change the audio.
 		var updateScore = function() {
+				ctx.fillStyle = "black"
 				ctx.fillText(score.toString(), 0, 600);
 			}
 			//A function to update the score
