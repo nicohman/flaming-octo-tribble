@@ -208,9 +208,13 @@ window.onload = function() {
 				} else {
 					wilb = -1;
 				}
+				var ex = 0;
+				if(wilb == -1){
+					ex = 450;
+				}
 				planes.push({
-					topX: 0,
-					orientL: 1,
+					topX: ex,
+					orientL: wilb,
 					layer: 0,
 					topY: 0
 				})
@@ -238,10 +242,13 @@ window.onload = function() {
 					planes[index].topX = planes[index].topX + (2 * planes[index].orientL);
 
 					imig = planeImgs['B'];
-				} else {
+				} else if (val.layer == 0 && val.orientL == -1){
+					planes[index].topX = planes[index].topX + (4 * planes[index].orientL);
+					imig = planeImgs['L'];
+				}{
 					planes[index].topX = planes[index].topX + (4 * planes[index].orientL);
 
-					imig = planeImgs['R']
+					imig = planeImgs['R'];
 				}
 				drawImage(imig, planes[index].topX, layas[planes[index].layer])
 
