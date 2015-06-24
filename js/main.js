@@ -12,11 +12,13 @@ var Tank = {
 var planes = [{
 	topX: 0,
 	layer: 1,
-	orientL: 1
+	orientL: 1,
+	topY: 65
 }];
 var coolDownL1 = 66.66;
 var bullets = [];
 var coolDown = 0;
+var score = 0;
 var coolDownL0 = 100;
 var coolDownL2 = 166.66;
 window.onload = function() {
@@ -24,12 +26,27 @@ window.onload = function() {
 	canvas = document.createElement("canvas");
 
 	ctx = canvas.getContext('2d');
+	ctx.font = "45px Arial";
 
 	canvas.setAttribute('width', 500);
 	canvas.setAttribute('height', 700);
 
 	body.appendChild(canvas);
 	var loader;
+
+
+	var haveCollided = function(rect1, rect2) {
+		if (rect1.topX < rect2.topX + 32 && rect1.topX + 8 > rect2.topX &&
+			rect1.topY - 8 < rect2.topY && rect1.topY > rect2.topY - 32) {
+			// The objects are touching
+			return true;
+		} else {
+			return false;
+		}
+	}
+	var updateScore = function() {
+		ctx.fillText(score.toString(), 0, 600);
+	}
 	var imgLoad = function(url, callback) {
 		loader = new Image();
 		loader.onload = callback;
@@ -84,6 +101,7 @@ window.onload = function() {
 		'R': imgLoad('./img/plane-1.png')
 	}
 	var animate = function() {
+
 		ctx.clearRect(0, 0, 500, 610);
 		if (rightDown && Tank.topX + 5 <= 450) {
 			Tank.topX = Tank.topX + 5;
@@ -96,6 +114,7 @@ window.onload = function() {
 		} else if (coolDown > 0) {
 			coolDown = coolDown - 1
 		}
+
 		bullets.forEach(function(val, index, arr) {
 			bullets[index].topY = bullets[index].topY - 5;
 			drawImage(bull, bullets[index].topX, bullets[index].topY);
@@ -111,7 +130,8 @@ window.onload = function() {
 			planes.push({
 				topX: 0,
 				orientL: 1,
-				layer: 1
+				layer: 1,
+				topY: 65
 			})
 			coolDownL1 = 66.66;
 		}
@@ -125,7 +145,8 @@ window.onload = function() {
 			planes.push({
 				topX: 0,
 				orientL: 1,
-				layer: 0
+				layer: 0,
+				topY: 0
 			})
 			coolDownL0 = 100;
 		}
@@ -139,7 +160,8 @@ window.onload = function() {
 			planes.push({
 				topX: 0,
 				orientL: 1,
-				layer: 2
+				layer: 2,
+				topY: 130
 			})
 			coolDownL2 = 166.66;
 		}
@@ -157,7 +179,27 @@ window.onload = function() {
 		coolDownL1 = coolDownL1 - 1;
 		coolDownL0 = coolDownL0 - 1;
 		coolDownL2 = coolDownL2 - 1;
-
+		bullets.forEach(function(val, index, arr) {
+			planes.forEach(function(valp, indexp, arrp) {
+				if (haveCollided(val, valp)) {
+					var toAdd;
+					if (valp.layer == 2) {
+						toAdd = 0.5;
+					} else if (valp.layer == 1) {
+						toAdd = 1;
+					} else if (valp.layer == 0) {
+						toAdd = 0;
+					} else {
+						alert('OH NO ITS ALL DIED')
+					}
+					score = score + toAdd;
+					updateScore();
+					bullets.splice(index, 1);
+					planes.splice(indexp, 1);
+				}
+			})
+		})
+		updateScore();
 	}
 	setInterval(animate, frameRate);
 }
