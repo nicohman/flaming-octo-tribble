@@ -15,9 +15,14 @@ var planes = [{
 }];
 var coolDownL1 = 66.66;
 var bullets = [];
+var level = 1;
+var intervalID = null;
+var bomb;
+var bombs = [];
 var coolDown = 0;
 var animation = [];
 var frame1;
+var gameOver;
 var ufos = [];
 var frame2;
 var frame3;
@@ -76,7 +81,13 @@ window.onload = function() {
 	}
 	//A function to more easily change the audio.
 	var updateScore = function() {
+		if(score > 15){
+			score = score - 15
+			level = level +1;
+			ctx.fillText('LEVEL UP!', 150, 300)
+		}
 			ctx.fillText('Score:' + score.toString(), 0, 580);
+			ctx.fillText('Level:'+level.toString(), 0, 570)
 		}
 		//A function to update the score
 	var imgLoad = function(url, callback) {
@@ -100,20 +111,24 @@ window.onload = function() {
 		}
 		//An automatic bullet-firer
 	bull = imgLoad('./img/bullet.png');
+	bomb = imgLoad('./img/dabomb.png');
 	var grass = imgLoad('./img/g.png');
 	var splasher = imgLoad('./img/splash.png');
 	var blimpie = imgLoad('./img/blimpie.png', function() {});
 	frame1 = imgLoad('./img/frame1.png', function() {});
 	frame2 = imgLoad('./img/frame2.png', function() {});
 	frame3 = imgLoad('./img/frame3.png', function() {});
+	var over = imgLoad('./img/over.png');
 	var ufo = imgLoad('./img/ufo.png')
 		//Loading some images.
 	var layas = [0, 65, 130];
 	drawImage(splasher, 0, 0);
 	//Detecting when the player starts to press down the left, right, or space keys.
 	$('#body').keydown(function(event) {
+		event.preventDefault();
 		$('#body').unbind('keydown');
 		$('#body').keydown(function(event) {
+			event.preventDefault();
 			if (event.keyCode == 39) {
 				rightDown = true;
 			} else if (event.keyCode == 37) {
@@ -180,7 +195,7 @@ window.onload = function() {
 						val.orientL = -1;
 					}
 					drawImage(ufo, val.topX, val.topY);
-					arr[index].topX = val.topX + 15 * val.orientL
+					arr[index].topX = val.topX + 10 * val.orientL
 				});
 				//Move the bullets, and if they've reached the top of the screen, DESTROY THEM
 				bullets.forEach(function(val, index, arr) {
@@ -189,7 +204,7 @@ window.onload = function() {
 						if (val.topY < 0) {
 							arr.splice(index, 1);
 						}
-					})
+					});
 					//Now draw the tank.
 				drawImage(tank, Tank.topX, Tank.topY)
 					//Next, spawn some planes/blimps based on how long ago the last ones were spawned.
@@ -246,25 +261,37 @@ window.onload = function() {
 				planes.forEach(function(val, index, arr) {
 					var imig;
 					if (planes[index].layer == 2) {
-						planes[index].topX = planes[index].topX + (2 * planes[index].orientL);
-
+						planes[index].topX = planes[index].topX + (level*0.1)+(2 * planes[index].orientL);
 						imig = planeImgs['B'];
 					} else if (val.layer == 0 && val.orientL == -1) {
-						planes[index].topX = planes[index].topX + (4 * planes[index].orientL);
+						planes[index].topX = planes[index].topX + (level*0.1)+(4 * planes[index].orientL);
 						imig = planeImgs['L'];
 					} {
-						planes[index].topX = planes[index].topX + (4 * planes[index].orientL);
+						planes[index].topX = planes[index].topX + (level*0.1)+(4 * planes[index].orientL);
 
 						imig = planeImgs['R'];
 					}
 					drawImage(imig, planes[index].topX, layas[planes[index].layer])
-
+					if(randomIntFromInterval(0, (500 - (level * 4))) == 6) {
+					bombs.push({
+						topX:val.topX,
+						topY:val.topY
+					});
+				}
 				});
 				//Decrease the cooldown for each plane layer
 				coolDownL1 = coolDownL1 - 1;
 				coolDownL0 = coolDownL0 - 1;
 				coolDownL2 = coolDownL2 - 1;
 				//Collison detection/audio playing.
+
+				bombs.forEach(function(val, index, arr){
+					drawImage(bomb, val.topX, val.topY);
+					if(haveCollided(val, Tank)){
+						gameOver = true;
+					}
+					arr[index].topY = val.topY+7;
+				})
 				bullets.forEach(function(val, index, arr) {
 						planes.forEach(function(valp, indexp, arrp) {
 							if (haveCollided(val, valp)) {
@@ -291,7 +318,23 @@ window.onload = function() {
 								planes.splice(indexp, 1);
 							}
 						})
-					})
+						ufos.forEach(function(valu, indexu, arru){
+							if(haveCollided(val, valu)){
+								score = score + 15;
+								changeAudio('./audio/boom.mp3');
+
+								updateScore();
+								animation.push({
+									framenum: 1,
+									topX: valu.topX,
+									topY: valu.topY
+								});
+								bullets.splice(index, 1);
+								planes.splice(indexu, 1);
+							}
+							})
+						}
+					)
 					//And continuing previously made animations
 				if (animation.length > 0) {
 					animation.forEach(function(val, index, arr) {
@@ -305,15 +348,21 @@ window.onload = function() {
 				}
 				//And finally update the score...
 				updateScore();
-				if (window.requestAnimationFrame) {
+				if (window.requestAnimationFrame && gameOver !== true) {
 					window.requestAnimationFrame(animate);
+				}
+				if (intervalID !== null && gameOver === true){
+					clearInterval(intervalID)
+				}
+				if(gameOver === true){
+					drawImage(over, 0, 0);
 				}
 			}
 			//And now make stuff happen!
-		if (window.requestAnimationFrame) {
+		if (window.requestAnimationFrame && gameOver !== true) {
 			window.requestAnimationFrame(animate);
-		} else {
-			setInterval(animate, frameRate);
+		} else if(gameOver !== true){
+			intervalID = setInterval(animate, frameRate);
 		}
 	})
 
