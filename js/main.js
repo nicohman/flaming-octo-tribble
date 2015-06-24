@@ -4,7 +4,7 @@ var leftDown;
 var spaceDown;
 var Tank = {
 	topX: 0,
-	topY: 540
+	topY: 575
 }
 var planes = [{
 	topX: 0,
@@ -88,9 +88,9 @@ window.onload = function() {
 	var blimpie = imgLoad('./img/blimpie.png', function() {});
 
 	var bull = imgLoad('./img/bullet.png', function() {});
-	var frame1 = imgLoad('./img/frame1.png', function() {});
-	var frame2 = imgLoad('./img/frame2.png', function() {});
-	var frame3 = imgLoad('./img/frame3.png', function() {});
+	 frame1 = imgLoad('./img/frame1.png', function() {});
+	 frame2 = imgLoad('./img/frame2.png', function() {});
+	 frame3 = imgLoad('./img/frame3.png', function() {});
 	var ufo = imgLoad('./img/ufo.png')
 
 	var layas = [0, 65, 130];
