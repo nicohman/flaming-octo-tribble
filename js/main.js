@@ -34,6 +34,7 @@ window.onload = function() {
 		//Retrieve the canvas and get the context out of it.
 		canvas.setAttribute('width', 500);
 		canvas.setAttribute('height', 700);
+		canvas.setAttribute('id', 'cav')
 		//Set some height/width
 		body.appendChild(canvas);
 		//Aaand attach it to the actually body of the page.

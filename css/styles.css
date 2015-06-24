@@ -3,6 +3,8 @@
 	width:1200;
 	border-style: solid;
 	background-color: white;
+	border-radius: 25px;
+    border: 10px solid LightBlue;
 }
 canvas {
     padding-left: 0;
@@ -10,6 +12,4 @@ canvas {
     margin-left: auto;
     margin-right: auto;
     display: block;
-}
-body {
 }
