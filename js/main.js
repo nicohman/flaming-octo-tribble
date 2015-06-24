@@ -1,6 +1,3 @@
-//var cv = document.getElementById('canvas');
-//var ctx = cv.getContext('2d');
-//var ctx = $('#canvas').get(0).getContext('2d');
 var frameRate = 1000 / 30;
 var rightDown;
 var leftDown;
@@ -40,53 +37,11 @@ window.onload = function() {
 	body.appendChild(canvas);
 	var loader;
 
-	function randomIntFromInterval(min, max) {
-		return Math.floor(Math.random() * (max - min + 1) + min);
-	}
 
-	var haveCollided = function(rect1, rect2) {
-		if (rect1.topX < rect2.topX + 32 && rect1.topX + 8 > rect2.topX &&
-			rect1.topY - 8 < rect2.topY && rect1.topY > rect2.topY - 32) {
-			// The objects are touching
-			return true;
-		} else {
-			return false;
-		}
-	}
-
-	function changeAudio(sourceUrl) {
-		var audio = $("#player");
-		$("#player").attr("src", sourceUrl);
-		audio[0].pause();
-		audio[0].load();
-		audio[0].play();
-	}
-	var updateScore = function() {
-		ctx.fillText(score.toString(), 0, 600);
-	}
-	var imgLoad = function(url, callback) {
-		loader = new Image();
-		loader.onload = callback;
-		loader.src = url;
-		return loader;
-	}
-	var drawImage = function(img, posX, posY) {
-		ctx.drawImage(img, posX, posY);
-	}
-	var fireBullet = function() {
-		var bulX = Tank.topX + 22;
-		var bulY = Tank.topY + 15;
-		bullets.push({
-			topX: bulX,
-			topY: bulY
-		});
-	}
 	var grass = imgLoad('./img/g.png', function() {
 		drawImage(grass, 0, 0);
 	});
-	frame1 = imgLoad('./img/frame1.png', function() {});
-	frame2 = imgLoad('./img/frame2.png', function() {});
-	frame3 = imgLoad('./img/frame3.png', function() {});
+
 	var blimpie = imgLoad('./img/blimpie.png', function() {});
 	var layas = [0, 65, 130];
 	$('#body').keydown(function(event) {
@@ -115,8 +70,7 @@ window.onload = function() {
 	var tank = imgLoad('./img/tank.png', function() {
 		drawImage(tank, Tank.topX, Tank.topY)
 	});
-	ufo = imgLoad('./img/ufo.png')
-	bull = imgLoad('./img/bullet.png', function() {});
+
 	planeImgs = {
 		'L': imgLoad('./img/plane1.png'),
 		'R': imgLoad('./img/plane-1.png'),
@@ -136,15 +90,15 @@ window.onload = function() {
 		} else if (coolDown > 0) {
 			coolDown = coolDown - 1
 		}
-		if(randomIntFromInterval(0, 667) ===4){
-			alert('UFO!');
+		if (randomIntFromInterval(0, 667) === 4) {
 			ufos.push({
-				topY:randomIntFromInterval(140, 200),
-				topX:0
+				topY: randomIntFromInterval(140, 200),
+				topX: 0
 			});
 		}
-		ufos.forEach(function(val, index, arr){
+		ufos.forEach(function(val, index, arr) {
 			drawImage(ufo, val.topX, val.topY);
+			arr[index].topX = val.topX + 15
 		});
 		bullets.forEach(function(val, index, arr) {
 			bullets[index].topY = bullets[index].topY - bulletSpeed;
@@ -230,6 +184,8 @@ window.onload = function() {
 						alert('OH NO ITS ALL DIED')
 					}
 					score = score + toAdd;
+					changeAudio('./audio/boom.mp3');
+
 					updateScore();
 					animation.push({
 						framenum: 1,
@@ -247,7 +203,6 @@ window.onload = function() {
 					arr.splice(index, 1);
 					return;
 				}
-				changeAudio('./audio/boom.mp3');
 				drawImage(window['frame' + val.framenum.toString()], val.topX, val.topY)
 				arr[index].framenum = arr[index].framenum + 1
 			});

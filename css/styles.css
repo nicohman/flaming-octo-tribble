@@ -2,6 +2,7 @@
 	height:720;
 	width:1200;
 	border-style: solid;
+	background-color: white;
 }
 canvas {
     padding-left: 0;
@@ -9,4 +10,6 @@ canvas {
     margin-left: auto;
     margin-right: auto;
     display: block;
+}
+body {
 }
