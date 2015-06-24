@@ -30,7 +30,7 @@ window.onload = function() {
 		var body = document.getElementById("body");
 		canvas = document.createElement("canvas");
 		ctx = canvas.getContext('2d');
-		ctx.font = "45px Arial";
+		ctx.font = "60px Arial";
 		//Retrieve the canvas and get the context out of it.
 		canvas.setAttribute('width', 500);
 		canvas.setAttribute('height', 700);
@@ -54,6 +54,11 @@ window.onload = function() {
 		}
 
 		function changeAudio(sourceUrl) {
+			if(sourceUrl == './audio/boom.mp3'){
+				var audio = $("#boosh");
+				audio[0].currentTime = 0;
+				audio[0].play()
+			}
 			var audio = $("#player");
 			if ($("#player").attr("src") !== sourceUrl) {
 				$("#player").attr("src", sourceUrl);
@@ -69,7 +74,7 @@ window.onload = function() {
 		}
 		//A function to more easily change the audio.
 		var updateScore = function() {
-				ctx.fillText(score.toString(), 0, 600);
+				ctx.fillText('Score:' + score.toString(), 0, 580);
 			}
 			//A function to update the score
 		var imgLoad = function(url, callback) {
@@ -229,11 +234,11 @@ window.onload = function() {
 			planes.forEach(function(val, index, arr) {
 				var imig;
 				if (planes[index].layer == 2) {
-					planes[index].topX = planes[index].topX + (2.5 * planes[index].orientL);
+					planes[index].topX = planes[index].topX + (2 * planes[index].orientL);
 
 					imig = planeImgs['B'];
 				} else {
-					planes[index].topX = planes[index].topX + (5 * planes[index].orientL);
+					planes[index].topX = planes[index].topX + (4 * planes[index].orientL);
 
 					imig = planeImgs['R']
 				}
