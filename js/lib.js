@@ -1,4 +1,5 @@
-function randomIntFromInterval(min, max) {
+window.onload = function(){
+	function randomIntFromInterval(min, max) {
 	return Math.floor(Math.random() * (max - min + 1) + min);
 }
 
@@ -72,3 +73,4 @@ var score = 0;
 var coolDownL0 = 100;
 var coolDownL2 = 166.66;
 const bulletSpeed = 12;
+}
