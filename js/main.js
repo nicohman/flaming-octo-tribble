@@ -81,13 +81,13 @@ window.onload = function() {
 	}
 	//A function to more easily change the audio.
 	var updateScore = function() {
-		if(score > 15){
-			score = score - 15
-			level = level +1;
-			ctx.fillText('LEVEL UP!', 150, 300)
-		}
+			if (score > 15) {
+				score = score - 15
+				level = level + 1;
+				ctx.fillText('LEVEL UP!', 150, 300)
+			}
 			ctx.fillText('Score:' + score.toString(), 0, 580);
-			ctx.fillText('Level:'+level.toString(), 0, 570)
+			ctx.fillText('Level:' + level.toString(), 0, 570)
 		}
 		//A function to update the score
 	var imgLoad = function(url, callback) {
@@ -195,17 +195,17 @@ window.onload = function() {
 						val.orientL = -1;
 					}
 					drawImage(ufo, val.topX, val.topY);
-					arr[index].topX = val.topX + 10 * val.orientL
+					arr[index].topX = val.topX + 6.5 * val.orientL
 				});
 				//Move the bullets, and if they've reached the top of the screen, DESTROY THEM
 				bullets.forEach(function(val, index, arr) {
-						bullets[index].topY = bullets[index].topY - bulletSpeed;
-						drawImage(window.bull, bullets[index].topX, bullets[index].topY);
-						if (val.topY < 0) {
-							arr.splice(index, 1);
-						}
-					});
-					//Now draw the tank.
+					bullets[index].topY = bullets[index].topY - bulletSpeed;
+					drawImage(window.bull, bullets[index].topX, bullets[index].topY);
+					if (val.topY < 0) {
+						arr.splice(index, 1);
+					}
+				});
+				//Now draw the tank.
 				drawImage(tank, Tank.topX, Tank.topY)
 					//Next, spawn some planes/blimps based on how long ago the last ones were spawned.
 				if (coolDownL1 < 1) {
@@ -261,23 +261,23 @@ window.onload = function() {
 				planes.forEach(function(val, index, arr) {
 					var imig;
 					if (planes[index].layer == 2) {
-						planes[index].topX = planes[index].topX + (level*0.1)+(2 * planes[index].orientL);
+						planes[index].topX = planes[index].topX + (level * 0.1) + (2 * planes[index].orientL);
 						imig = planeImgs['B'];
 					} else if (val.layer == 0 && val.orientL == -1) {
-						planes[index].topX = planes[index].topX + (level*0.1)+(4 * planes[index].orientL);
+						planes[index].topX = planes[index].topX + (level * 0.1) + (4 * planes[index].orientL);
 						imig = planeImgs['L'];
 					} {
-						planes[index].topX = planes[index].topX + (level*0.1)+(4 * planes[index].orientL);
+						planes[index].topX = planes[index].topX + (level * 0.1) + (4 * planes[index].orientL);
 
 						imig = planeImgs['R'];
 					}
 					drawImage(imig, planes[index].topX, layas[planes[index].layer])
-					if(randomIntFromInterval(0, (500 - (level * 4))) == 6) {
-					bombs.push({
-						topX:val.topX,
-						topY:val.topY
-					});
-				}
+					if (randomIntFromInterval(0, (500 - (level * 4))) == 6) {
+						bombs.push({
+							topX: val.topX,
+							topY: val.topY
+						});
+					}
 				});
 				//Decrease the cooldown for each plane layer
 				coolDownL1 = coolDownL1 - 1;
@@ -285,12 +285,12 @@ window.onload = function() {
 				coolDownL2 = coolDownL2 - 1;
 				//Collison detection/audio playing.
 
-				bombs.forEach(function(val, index, arr){
+				bombs.forEach(function(val, index, arr) {
 					drawImage(bomb, val.topX, val.topY);
-					if(haveCollided(val, Tank)){
+					if (haveCollided(val, Tank)) {
 						gameOver = true;
 					}
-					arr[index].topY = val.topY+7;
+					arr[index].topY = val.topY + 7;
 				})
 				bullets.forEach(function(val, index, arr) {
 						planes.forEach(function(valp, indexp, arrp) {
@@ -318,8 +318,8 @@ window.onload = function() {
 								planes.splice(indexp, 1);
 							}
 						})
-						ufos.forEach(function(valu, indexu, arru){
-							if(haveCollided(val, valu)){
+						ufos.forEach(function(valu, indexu, arru) {
+							if (haveCollided(val, valu)) {
 								score = score + 15;
 								changeAudio('./audio/boom.mp3');
 
@@ -332,9 +332,8 @@ window.onload = function() {
 								bullets.splice(index, 1);
 								planes.splice(indexu, 1);
 							}
-							})
-						}
-					)
+						})
+					})
 					//And continuing previously made animations
 				if (animation.length > 0) {
 					animation.forEach(function(val, index, arr) {
@@ -351,17 +350,17 @@ window.onload = function() {
 				if (window.requestAnimationFrame && gameOver !== true) {
 					window.requestAnimationFrame(animate);
 				}
-				if (intervalID !== null && gameOver === true){
+				if (intervalID !== null && gameOver === true) {
 					clearInterval(intervalID)
 				}
-				if(gameOver === true){
+				if (gameOver === true) {
 					drawImage(over, 0, 0);
 				}
 			}
 			//And now make stuff happen!
 		if (window.requestAnimationFrame && gameOver !== true) {
 			window.requestAnimationFrame(animate);
-		} else if(gameOver !== true){
+		} else if (gameOver !== true) {
 			intervalID = setInterval(animate, frameRate);
 		}
 	})
