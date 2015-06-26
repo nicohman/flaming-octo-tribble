@@ -1,9 +1,11 @@
-export const bulletSpeed = 12;
-export const blimpSpeed = 2;
-export const planeSpeed = 4;
-export const ufoSpeed = 6.5;
-export var score = 0;
-export var coolDownL0 = 100;
-export var coolDownL2 = 166.66;
-export var frameRate = 1000 / 30;
-export var coolDownL1 = 66.66;
+define({
+  coolDownL1: 66.66,
+  frameRate: (1000/30),
+  coolDownL2: 166.66,
+  coolDownL0: 100,
+  score: 0,
+  ufoSpeed: 6.5,
+  blimpSpeed: 2,
+  planeSpeed: 4,
+  bulletSpeed: 12
+});
