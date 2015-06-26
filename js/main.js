@@ -1,3 +1,6 @@
+/*Main.js - the main game code for Tanks v Planes
+By Nicholas Hickman
+*/
 //Let's define some important variables here.
 var frameRate = 1000 / 30;
 var rightDown;
@@ -31,6 +34,9 @@ var coolDownL0 = 100;
 var coolDownL2 = 166.66;
 var bull;
 const bulletSpeed = 12;
+const blimpSpeed = 2;
+const planeSpeed = 4;
+const ufoSpeed = 6.5;
 window.onload = function() {
 	//Now that the window has loaded, let's actually get to work.
 	var body = document.getElementById("body");
@@ -195,7 +201,7 @@ window.onload = function() {
 						val.orientL = -1;
 					}
 					drawImage(ufo, val.topX, val.topY);
-					arr[index].topX = val.topX + 6.5 * val.orientL
+					arr[index].topX = val.topX + ufoSpeed * val.orientL
 				});
 				//Move the bullets, and if they've reached the top of the screen, DESTROY THEM
 				bullets.forEach(function(val, index, arr) {
@@ -207,14 +213,8 @@ window.onload = function() {
 				});
 				//Now draw the tank.
 				drawImage(tank, Tank.topX, Tank.topY)
-					//Next, spawn some planes/blimps based on how long ago the last ones were spawned.
+				//Next, spawn some planes/blimps based on how long ago the last ones were spawned.
 				if (coolDownL1 < 1) {
-					var wilb;
-					if (Math.round(Math.random() * 1) == 1) {
-						wilb = 1;
-					} else {
-						wilb = -1;
-					}
 					planes.push({
 						topX: 0,
 						orientL: 1,
@@ -243,12 +243,6 @@ window.onload = function() {
 					coolDownL0 = 100;
 				}
 				if (coolDownL2 < 1) {
-					var wilb;
-					if (Math.round(Math.random() * 1) == 1) {
-						wilb = 1;
-					} else {
-						wilb = -1;
-					}
 					planes.push({
 						topX: 0,
 						orientL: 1,
@@ -260,15 +254,14 @@ window.onload = function() {
 				//Move the planes
 				planes.forEach(function(val, index, arr) {
 					var imig;
-					if (planes[index].layer == 2) {
-						planes[index].topX = planes[index].topX + (level * 0.1) + (2 * planes[index].orientL);
+					if (arr[index].layer === 2) {
+						planes[index].topX = planes[index].topX + (level * 0.1) + (blimpSpeed * planes[index].orientL);
 						imig = planeImgs['B'];
 					} else if (val.layer == 0 && val.orientL == -1) {
-						planes[index].topX = planes[index].topX + (level * 0.1) + (4 * planes[index].orientL);
+						planes[index].topX = planes[index].topX + (level * 0.1) + (planeSpeed * planes[index].orientL);
 						imig = planeImgs['L'];
-					} {
-						planes[index].topX = planes[index].topX + (level * 0.1) + (4 * planes[index].orientL);
-
+					} else{
+						planes[index].topX = planes[index].topX + (level * 0.1) + (planeSpeed * planes[index].orientL);
 						imig = planeImgs['R'];
 					}
 					drawImage(imig, planes[index].topX, layas[planes[index].layer])
