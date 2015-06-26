@@ -1,0 +1,9 @@
+export const bulletSpeed = 12;
+export const blimpSpeed = 2;
+export const planeSpeed = 4;
+export const ufoSpeed = 6.5;
+export var score = 0;
+export var coolDownL0 = 100;
+export var coolDownL2 = 166.66;
+export var frameRate = 1000 / 30;
+export var coolDownL1 = 66.66;

@@ -2,6 +2,13 @@
 By Nicholas Hickman
 */
 //Let's define some important variables here.
+function turnToGlobal(obj){
+	for(var propt in obj){
+		if(obj.hasOwnProperty(propt)){
+			window[propt] = propt;
+		};
+	}
+}
 var frameRate = 1000 / 30;
 var rightDown;
 var leftDown;
@@ -65,9 +72,9 @@ window.onload = function() {
 			return false;
 		}
 	}
-
+	lowLag.init();
 	function changeAudio(sourceUrl) {
-		if (sourceUrl == './audio/boom.mp3') {
+		/*if (sourceUrl == './audio/boom.mp3') {
 			var audio = $("#boosh");
 			audio[0].currentTime = 0;
 			audio[0].play()
@@ -82,8 +89,9 @@ window.onload = function() {
 			audio[0].pause();
 			audio[0].currentTime = 0;
 			audio[0].play();
-		}
-
+		}*/
+		lowLag.load(sourceUrl);
+		lowLag.play(sourceUrl);
 	}
 	//A function to more easily change the audio.
 	var updateScore = function() {
