@@ -40,7 +40,6 @@ var coolDownL0 = 100;
 var coolDownL2 = 166.66;
 var bull;
 var coolDownL1 = 66.66;
-var selected;
 const bulletSpeed = 12;
 var socket = io('http://10.0.1.14:3000');
 window.onload = function() {
@@ -228,16 +227,6 @@ window.onload = function() {
               })
             })
             window.planesByX = window.temp;
-            /*  planesByX.forEach(function(val, index, arr){
-                if(val.topX > 500){
-                  if(istank !== true){
-                    if(planesByX[selected].topX === val.topX){
-                      selected = selected-1;
-                    }
-                  }
-                  planesByX.splice(index, 1);
-                }
-              })*/
             window.planesByX.forEach(function(val) {
               var imgCode;
               var multiplier = 4;
@@ -254,7 +243,6 @@ window.onload = function() {
               var img = window.planeImgs[imgCode];
               drawImage(img, val.topX, layas[val.layer], true);
             });
-            //if(window.planesByX[selected])
             //First, wipe away everything but the grass.
             ctx.clearRect(0, 0, 500, 610);
             //Then, move the tank
@@ -272,16 +260,12 @@ window.onload = function() {
                 coolDown = coolDown - 1
               }
             }
-            if (istank !== true) {
-              if (selected == null) {
-                selected = 0;
-              }
-              if (leftDown && (selected + 1 < planesByX.length + 1)) {
+              if (leftDown && (selected + 1 < planesByX.length + 1) && istank !== true) {
                 selected = selected + 1
-              } else if (rightDown && (selected - 1 > planesByX.length - 1)) {
+              } else if (rightDown && (selected - 1 >= planesByX.length)&& istank !== true) {
                 selected = selected - 1
               }
-              if (spaceDown && bombs.length < 4) {
+              if (spaceDown && bombs.length < 4 && istank !== true) {
                 var tbbomb = {
                   topX: window.planesByX[selected].topX,
                   topY: window.planesByX[selected].topY
@@ -289,7 +273,7 @@ window.onload = function() {
                 bombs.push(tbbomb);
                 socket.emit('bomb', tbbomb)
               }
-            }
+
             window.planesByX.forEach(function(val, index, arr) {
               //TBS
               if (selected === index && istank !== true) {
@@ -298,6 +282,9 @@ window.onload = function() {
               var image = 'R'
               if (val.layer == 2) {
                 image = 'B'
+              }
+              if(val.topX > 500 || val.topX < 0){
+                planesByX.splice(index, 1);
               }
               drawImage(planeImgs[image], val.topX, val.topY)
             })
@@ -401,15 +388,6 @@ window.onload = function() {
                 arr.splice(index, 1);
               }
             })
-            if (planesByX[selected]) {
-
-            } else {
-              if (planesByX[selected - 1]) {
-                selected = selected - 1
-              } else if (planesByX[selected + 1]) {
-                selected += 1;
-              }
-            }
             bullets.forEach(function(val, index, arr) {
               planesByX.forEach(function(valp, indexp, arrp) {
                 if (haveCollided(val, valp)) {
@@ -431,12 +409,6 @@ window.onload = function() {
                     topX: valp.topX,
                     topY: valp.topY
                   });
-                  if (istank !== true) {
-                    if (planesByX[selected].topX === valp.topX) {
-                      selected = selected - 1;
-                    }
-
-                  }
                   bullets.splice(index, 1);
                   planesByX.splice(indexp, 1);
                 }
@@ -488,14 +460,16 @@ window.onload = function() {
               })
 
             }
-          }
+          };
           //And now make stuff happen!
+
           if (window.requestAnimationFrame && gameOver !== true) {
             window.requestAnimationFrame(animate);
           } else if (gameOver !== true) {
             intervalID = setInterval(animate, frameRate);
           }
         })
+
       });
     } else {
       //And now the function that'll run every frame loop: animate!

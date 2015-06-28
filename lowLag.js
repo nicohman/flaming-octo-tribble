@@ -24,19 +24,19 @@ var lowLag = new function(){
 		if(config != undefined){
 			if(config['force'] != undefined){
 				force = config['force'];
-			} 
+			}
 			if(config['audioTagTimeToLive'] != undefined){
 				lowLag.audioTagTimeToLive = config['audioTagTimeToLive'];
-			} 
+			}
 			if(config['sm2url'] != undefined){
 				lowLag.sm2url = config['sm2url'];
-			} 
+			}
 			if(config['urlPrefix'] != undefined){
 				lowLag.soundUrl = config['urlPrefix'];
-			} 
+			}
 			if(config['debug'] != undefined){
 				lowLag.debug = config['debug'];
-			} 
+			}
 
 		}
 
@@ -66,13 +66,13 @@ var lowLag = new function(){
 				this.load = this.loadSoundSM2;
 				this.play = this.playSoundSM2;
 				lowLag.msg("loading SM2 from "+lowLag.sm2url);
-				soundManager.setup({ url: lowLag.sm2url, useHighPerformance:true, 
+				soundManager.setup({ url: lowLag.sm2url, useHighPerformance:true,
 					onready:lowLag.sm2Ready , debugMode: true})
 
 
 			break;
 
-		}		
+		}
 
 
 	}
@@ -100,7 +100,7 @@ var lowLag = new function(){
 
 		soundManager.createSound({
       			id: tag,
-			autoLoad: true, 
+			autoLoad: true,
 		      url: urls
    		 });
 	};
@@ -120,7 +120,7 @@ var lowLag = new function(){
 		soundManager.play(tag);
 	}
 
-	
+
 
 
 
@@ -128,7 +128,7 @@ var lowLag = new function(){
 
 
 //we'll use the tag they hand us, or else the url as the tag if it's a single tag,
-//or the first url 
+//or the first url
 	this.getTagFromURL = function(url,tag){
 		if(tag != undefined) return tag;
 		return lowLag.getSingleURL(url);
@@ -164,7 +164,7 @@ lowLag.msg('webkitAudio loading '+url+' as tag ' + tag);
 		request.onload = function() {
 		    lowLag.webkitAudioContext.decodeAudioData(request.response, function(buffer) {
 				lowLag.webkitAudioBuffers[tag] = buffer;
-				
+
 				if(lowLag.webkitPendingRequest[tag]){ //a request might have come in, try playing it now
 					lowLag.playSoundWebkitAudio(tag);
 				}
@@ -213,7 +213,7 @@ lowLag.msg('webkitAudio loading '+url+' as tag ' + tag);
 		var id = "lowLagElem_"+lowLag.audioTagID++;
 
 		var tag = lowLag.getTagFromURL(urls,tag);
-		
+
 		var urls = lowLag.getURLArray(urls);
 
 
@@ -250,7 +250,7 @@ lowLag.msg(tag);
 				},lowLag.audioTagTimeToLive);
 		}
 		cloneElem.play();
-	    
+
 	}
 
 
@@ -263,10 +263,8 @@ lowLag.msg(tag);
 	this.msg = function(m){
 		m = "-- lowLag "+m;
 		if(lowLag.debug == 'both' || lowLag.debug == 'console'){
-			console.log(m+"<br>");
 		}
 		if(lowLag.debug == 'both' || lowLag.debug == 'screen'){
-			$('#lowLag').append(m+"<br>");
 		}
 	}
 

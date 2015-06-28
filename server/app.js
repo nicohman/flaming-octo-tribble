@@ -28,7 +28,6 @@ io.on('connection', function(socket){
 		}
 	});
 	socket.on('tank', function(data){
-		console.log('tank event')
 		games.forEach(function(val, index, arr){
 			if(val.p1 === socket.id){
 				io.in(val.p2).emit('tank', data);
@@ -43,7 +42,6 @@ io.on('connection', function(socket){
 		})
 	})
 	socket.on('plane', function(data){
-		console.log('plane evenet')
 		games.forEach(function(val, index, arr){
 			if(val.p2 === socket.id){
 				io.in(val.p1).emit('plane', data);
@@ -51,15 +49,4 @@ io.on('connection', function(socket){
 		})
 	})
 })
-/*http.createServer(function(req, res){
-	if(req.url[req.url.split('.')[1] === "png"]){
-		,,,fs.readFile('../'+req.url, function(err, data){
-			res.end(data);
-		});
-	}else {
-	fs.readFile('../'+req.url, {encoding:'utf8'}, function(err, data){
-		res.end(data);
-	});
-}
-}).listen(7000)*/
 console.log('server');
