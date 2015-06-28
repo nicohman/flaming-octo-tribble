@@ -55,9 +55,7 @@ window.onload = function() {
   canvas.setAttribute('id', 'cav')
   //Set some height/width
   canvas.innerHTML = "U NO CANVAS";
-  console.log(canvas)
   body.appendChild(canvas);
-  console.log(ctx);
   //Aaand attach it to the actually body of the page.
   var loader;
   //TFTBL LB
@@ -256,8 +254,6 @@ window.onload = function() {
               var img = window.planeImgs[imgCode];
               drawImage(img, val.topX, layas[val.layer], true);
             });
-            //console.log(planes);
-            //	console.log(planesByX);
             //if(window.planesByX[selected])
             //First, wipe away everything but the grass.
             ctx.clearRect(0, 0, 500, 610);
@@ -330,7 +326,6 @@ window.onload = function() {
                   layer: 1,
                   topY: 65
                 })
-                //  console.log('made layer1 plane')
                 coolDownL1 = 66.66;
               }
               if (coolDownL0 < 1) {
@@ -350,7 +345,6 @@ window.onload = function() {
                   layer: 0,
                   topY: 0
                 })
-                //  console.log('made layer0 plane')
 
                 coolDownL0 = 100;
               }
@@ -367,7 +361,6 @@ window.onload = function() {
                   layer: 2,
                   topY: 130
                 })
-                //      console.log('made layer2 plane')
 
                 coolDownL2 = 166.66;
               }
@@ -485,10 +478,14 @@ window.onload = function() {
             }
             if (gameOver === true && istank == true) {
               drawImage(over, 0, 0);
-              $('#body').keydown(function(event) {})
+              $('#body').keydown(function(event) {
+                location.reload(true);
+              })
             } else if (gameOver === true && istank !== true) {
               drawImage(overplane, 0, 0);
-              $('#body').keydown(function(event) {})
+              $('#body').keydown(function(event) {
+                location.reload(true);
+              })
 
             }
           }
