@@ -89,7 +89,6 @@ window.onload = function() {
     }
     return 0;
   }
-  console.log(window.requestAnimationFrame)
   var updateScore = function() {
     if (score > 15) {
       score = score - 15
@@ -106,7 +105,6 @@ window.onload = function() {
     loader.src = url;
     return loader;
   }
-  console.log(ctx.drawImage);
   //A function to load a sprite/image
   var drawImage = function(img, posX, posY, why) {
     ctx.drawImage(img, posX, posY);
@@ -125,6 +123,7 @@ window.onload = function() {
   bull = imgLoad('./img/bullet.png');
   bomb = imgLoad('./img/dabomb.png');
   var grass = imgLoad('./img/g.png');
+  var overplane = imgLoad('./img/overplane.png');
   var splasher = imgLoad('./img/splash.png', function() {
     drawImage(splasher, 0, 0)
   });
@@ -179,11 +178,9 @@ window.onload = function() {
     if (event.keyCode == 77) {
       window.multiplayer = true;
       var loaded = imgLoad('./img/loaded.png', function() {
-        console.log('lookin')
         drawImage(loaded, 0, 0);
         socket.emit('looking');
         socket.on('done', function(data) {
-          console.log('done')
           var istank = false;
           gameOver = false;
           if (data.tank) {
@@ -233,16 +230,16 @@ window.onload = function() {
               })
             })
             window.planesByX = window.temp;
-          /*  planesByX.forEach(function(val, index, arr){
-              if(val.topX > 500){
-                if(istank !== true){
-                  if(planesByX[selected].topX === val.topX){
-                    selected = selected-1;
+            /*  planesByX.forEach(function(val, index, arr){
+                if(val.topX > 500){
+                  if(istank !== true){
+                    if(planesByX[selected].topX === val.topX){
+                      selected = selected-1;
+                    }
                   }
+                  planesByX.splice(index, 1);
                 }
-                planesByX.splice(index, 1);
-              }
-            })*/
+              })*/
             window.planesByX.forEach(function(val) {
               var imgCode;
               var multiplier = 4;
@@ -285,10 +282,10 @@ window.onload = function() {
               }
               if (leftDown && (selected + 1 < planesByX.length + 1)) {
                 selected = selected + 1
-              } else if (rightDown &&(selected - 1 > planesByX.length - 1)) {
+              } else if (rightDown && (selected - 1 > planesByX.length - 1)) {
                 selected = selected - 1
               }
-              if (spaceDown) {
+              if (spaceDown && bombs.length < 4) {
                 var tbbomb = {
                   topX: window.planesByX[selected].topX,
                   topY: window.planesByX[selected].topY
@@ -303,7 +300,9 @@ window.onload = function() {
                 drawImage(cross, val.topX - 8, val.topY - 8);
               }
               var image = 'R'
-              if(val.layer == 2){image = 'B'}
+              if (val.layer == 2) {
+                image = 'B'
+              }
               drawImage(planeImgs[image], val.topX, val.topY)
             })
             //Move the bullets, and if they've reached the top of the screen, DESTROY THEM
@@ -331,7 +330,7 @@ window.onload = function() {
                   layer: 1,
                   topY: 65
                 })
-              //  console.log('made layer1 plane')
+                //  console.log('made layer1 plane')
                 coolDownL1 = 66.66;
               }
               if (coolDownL0 < 1) {
@@ -351,7 +350,7 @@ window.onload = function() {
                   layer: 0,
                   topY: 0
                 })
-              //  console.log('made layer0 plane')
+                //  console.log('made layer0 plane')
 
                 coolDownL0 = 100;
               }
@@ -368,7 +367,7 @@ window.onload = function() {
                   layer: 2,
                   topY: 130
                 })
-          //      console.log('made layer2 plane')
+                //      console.log('made layer2 plane')
 
                 coolDownL2 = 166.66;
               }
@@ -394,7 +393,7 @@ window.onload = function() {
               }
               drawImage(window.imig, window.planesByX[index].topX, layas[window.planesByX[index].layer])
             });*/
-                        //Decrease the cooldown for each plane layer
+            //Decrease the cooldown for each plane layer
             coolDownL1 = coolDownL1 - 1;
             coolDownL0 = coolDownL0 - 1;
             coolDownL2 = coolDownL2 - 1;
@@ -405,13 +404,16 @@ window.onload = function() {
                 socket.emit('tankdead');
               }
               arr[index].topY = val.topY + 7;
+              if (val.topY > 600) {
+                arr.splice(index, 1);
+              }
             })
-            if(planesByX[selected]){
+            if (planesByX[selected]) {
 
             } else {
-              if(planesByX[selected-1]){
-                selected = selected -1
-              } else if (planesByX[selected +1]){
+              if (planesByX[selected - 1]) {
+                selected = selected - 1
+              } else if (planesByX[selected + 1]) {
                 selected += 1;
               }
             }
@@ -436,9 +438,9 @@ window.onload = function() {
                     topX: valp.topX,
                     topY: valp.topY
                   });
-                  if(istank !== true){
-                    if(planesByX[selected].topX === valp.topX){
-                      selected = selected-1;
+                  if (istank !== true) {
+                    if (planesByX[selected].topX === valp.topX) {
+                      selected = selected - 1;
                     }
 
                   }
@@ -466,7 +468,7 @@ window.onload = function() {
                 bullets: bullets
               });
             }
-            if(istank === false) {
+            if (istank === false) {
               socket.emit('plane', {
                 planes: planes,
                 bombs: bombs,
@@ -484,6 +486,10 @@ window.onload = function() {
             if (gameOver === true && istank == true) {
               drawImage(over, 0, 0);
               $('#body').keydown(function(event) {})
+            } else if (gameOver === true && istank !== true) {
+              drawImage(overplane, 0, 0);
+              $('#body').keydown(function(event) {})
+
             }
           }
           //And now make stuff happen!
