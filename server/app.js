@@ -21,8 +21,6 @@ io.on('connection', function(socket){
 			console.log(queue[0])
 			socket.in(queue[0]).emit('done', {tank:false});
 			queue.splice(0, 2);
-			console.log(games);
-			console.log(queue);
 		} else {
 			return;
 		}

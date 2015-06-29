@@ -16,7 +16,6 @@ var planes = [{
   orientL: 1,
   topY: 65
 }];
-
 window.planesByX = [{
   topX: 0,
   layer: 1,
@@ -68,6 +67,7 @@ window.onload = function() {
       // The objects are touching
       return true;
     } else {
+      //The objects are not touching
       return false;
     }
   }
