@@ -1,0 +1,3 @@
+Mongoose
+Creating registration pages
+Salt & password encryption

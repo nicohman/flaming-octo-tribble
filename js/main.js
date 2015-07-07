@@ -508,7 +508,7 @@ window.onload = function() {
               }
             });
             //Now draw the tank.
-            drawImage(tank, Tank.topX, Tank.topY)
+            drawImage(tank, Tank.topX, Tank.topY);
             //Next, spawn some window.planesByX/blimps based on how long ago the last ones were spawned.
             if (coolDownL1 < 1) {
               var wilb;
@@ -522,7 +522,7 @@ window.onload = function() {
                 orientL: 1,
                 layer: 1,
                 topY: 65
-              })
+              });
               coolDownL1 = 66.66;
             }
             if (coolDownL0 < 1) {
@@ -556,7 +556,7 @@ window.onload = function() {
                 orientL: 1,
                 layer: 2,
                 topY: 130
-              })
+              });
               coolDownL2 = 166.66;
             }
             //Move the window.planesByX
@@ -564,7 +564,7 @@ window.onload = function() {
               if (window.planesByX[index].layer == 2) {
                 window.planesByX[index].topX = window.planesByX[index].topX + (level * 0.1) + (2 * window.planesByX[index].orientL);
                 window.imig = window.planeImgs['B'];
-              } else if (val.layer == 0 && val.orientL == -1) {
+              } else if (val.layer === 0 && val.orientL == -1) {
                 window.planesByX[index].topX = window.planesByX[index].topX + (level * 0.1) + (4 * window.planesByX[index].orientL);
                 window.imig = window.planeImgs['L'];
               }{
@@ -572,7 +572,7 @@ window.onload = function() {
 
               window.imig = window.planeImgs['R'];
               }
-              drawImage(window.imig, window.planesByX[index].topX, layas[window.planesByX[index].layer])
+              drawImage(window.imig, window.planesByX[index].topX, layas[window.planesByX[index].layer]);
               if (randomIntFromInterval(0, (500 - (level * 4))) == 6) {
                 bombs.push({
                   topX: val.topX,
@@ -592,7 +592,7 @@ window.onload = function() {
                 gameOver = true;
               }
               arr[index].topY = val.topY + 7;
-            })
+            });
             bullets.forEach(function(val, index, arr) {
               window.planesByX.forEach(function(valp, indexp, arrp) {
                 if (haveCollided(val, valp)) {
@@ -601,10 +601,10 @@ window.onload = function() {
                     toAdd = 0.5;
                   } else if (valp.layer == 1) {
                     toAdd = 1;
-                  } else if (valp.layer == 0) {
+                  } else if (valp.layer === 0) {
                     toAdd = 2;
                   } else {
-                    alert('OH NO ITS ALL DIED')
+                    alert('OH NO ITS ALL DIED');
                   }
                   score = score + toAdd;
                   changeAudio('./audio/boom.mp3');
@@ -618,7 +618,7 @@ window.onload = function() {
                   bullets.splice(index, 1);
                   window.planesByX.splice(indexp, 1);
                 }
-              })
+              });
               ufos.forEach(function(valu, indexu, arru) {
                 if (haveCollided(val, valu)) {
                   score = score + 15;
@@ -633,9 +633,9 @@ window.onload = function() {
                   bullets.splice(index, 1);
                   ufos.splice(indexu, 1);
                 }
-              })
+              });
             }
-            )
+          );
             //And continuing previously made animations
             if (animation.length > 0) {
               animation.forEach(function(val, index, arr) {
@@ -643,8 +643,8 @@ window.onload = function() {
                   arr.splice(index, 1);
                   return;
                 }
-                drawImage(window['frame' + val.framenum.toString()], val.topX, val.topY)
-                arr[index].framenum = arr[index].framenum + 1
+                drawImage(window['frame' + val.framenum.toString()], val.topX, val.topY);
+                arr[index].framenum = arr[index].framenum + 1;
               });
             }
             //And finally update the score...
@@ -653,13 +653,13 @@ window.onload = function() {
               window.requestAnimationFrame(animate);
             }
             if (intervalID !== null && gameOver === true) {
-              clearInterval(intervalID)
+              clearInterval(intervalID);
             }
             if (gameOver === true) {
               drawImage(over, 0, 0);
-              $('#body').keydown(function(event) {})
+              $('#body').keydown(function(event) {});
             }
-          }
+          };
           //And now make stuff happen!
           if (window.requestAnimationFrame && gameOver !== true) {
             window.requestAnimationFrame(animate);
@@ -667,9 +667,9 @@ window.onload = function() {
             intervalID = setInterval(animate, frameRate);
           }
         }
-      })
+      });
 
-    })
+    });
   } else {
     window.location.href = "signin.html";
   }
