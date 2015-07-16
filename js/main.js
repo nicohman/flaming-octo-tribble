@@ -9,7 +9,7 @@ var spaceDown;
 var Tank = {
   topX: 0,
   topY: 575
-}
+};
 var planes = [{
   topX: 0,
   layer: 1,
@@ -208,7 +208,6 @@ window.onload = function() {
                   window.planesByX = data.planesByX;
                   //planes = data.planes;
                   bombs = data.bombs;
-
                 });
               } else {
                 socket.on('tank', function(data) {
@@ -675,4 +674,4 @@ window.onload = function() {
   }
   //Detecting when the player starts to press down the left, right, or space keys.
 
-}
+};

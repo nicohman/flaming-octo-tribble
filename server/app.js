@@ -48,9 +48,17 @@ io.on('connection', function(socket) {
       }
     });
   });
+	socket.on('register', function(data){
+		checkUserInfo(data.name, data.pass, function(boole){
+			if (boole === false){
+				global.db.collection('users').insert({name:'data.name', pass:data.pass}, function(err, records){
+					socket.emit('gtg');
+				});
+			}
+		});
+	});
   var clientIp = socket.request.connection.remoteAddress;
   console.log('connection!');
-
   socket.on('logged', function(data) {
     checkUserInfo(data.name, data.pass, function(bool) {
       if (bool === true) {
